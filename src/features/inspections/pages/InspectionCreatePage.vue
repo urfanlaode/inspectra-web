@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { router } from '@/app/router'
 import Header from '@/shared/layout/Header.vue'
+import { useQueryClient } from '@tanstack/vue-query'
 import InspectionForm from '../components/InspectionForm.vue'
 import { useStoreInspection } from '../hooks/useStoreInspection'
 import type { StoreInspectionPayload } from '../types/inspection.types'
+
+const qc = useQueryClient()
 
 const { mutate, isPending } = useStoreInspection()
 
@@ -12,6 +15,7 @@ async function onStore(payload: StoreInspectionPayload) {
     { payload },
     {
       onSuccess({ data }) {
+        qc.invalidateQueries({ queryKey: ['inspections'], exact: false })
         router.replace({ name: 'InspectionDetail', params: { id: data?.id } })
       }
     }
