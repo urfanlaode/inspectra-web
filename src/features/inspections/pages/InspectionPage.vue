@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { router } from '@/app/router'
 import Header from '@/shared/layout/Header.vue'
 import Button from '@/shared/ui/Button.vue'
 import { Plus } from 'lucide-vue-next'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import InspectionsTable from '../components/InspectionsTable.vue'
 import InspectionsTableSkeleton from '../components/InspectionsTableSkeleton.vue'
 import MenuActions from '../components/MenuActions.vue'
@@ -11,8 +11,28 @@ import MenuTabs from '../components/MenuTabs.vue'
 import { inspectionTabs } from '../constants'
 import { useInspections } from '../hooks/useInspections'
 
-const activeTab = ref('open')
+const router = useRouter()
+const route = useRoute()
+
+const activeTab = ref(String(route.query.tab ?? 'open'))
 const counts = { open: 1 }
+
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    const val = String(newTab ?? 'open')
+    if (activeTab.value !== val) activeTab.value = val
+  }
+)
+
+watch(activeTab, (val) => {
+  if (String(route.query.tab ?? '') !== val) {
+    router.replace({
+      name: route.name?.toString() ?? 'Inspection',
+      query: { ...route.query, tab: val }
+    })
+  }
+})
 
 function onCreate() {
   router.push({ name: 'InspectionCreate' })
