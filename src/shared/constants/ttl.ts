@@ -1,0 +1,13 @@
+export const TTL_10_SECONDS = 1000 * 10
+export const TTL_1_MINUTE = 1000 * 60
+export const TTL_5_MINUTES = 1000 * 60 * 5
+export const TTL_15_MINUTES = 1000 * 60 * 15
+export const TTL_30_MINUTES = 1000 * 60 * 30
+export const TTL_1_HOUR = 1000 * 60 * 60
+export const TTL_6_HOURS = 1000 * 60 * 60 * 6
+export const TTL_12_HOURS = 1000 * 60 * 60 * 12
+export const TTL_1_DAY = 1000 * 60 * 60 * 24
+export const TTL_3_DAYS = 1000 * 60 * 60 * 24 * 3
+export const TTL_7_DAYS = 1000 * 60 * 60 * 24 * 7
+export const TTL_ONE_MONTH = 1000 * 60 * 60 * 24 * 30
+export const TTL_FOREVER = Number.POSITIVE_INFINITY

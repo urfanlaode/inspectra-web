@@ -1,8 +1,3 @@
 {
-  "app": {
-    "loading": "Loading...",
-    "noResults": "No results found",
-    "back": "Back",
-    "footer": "© 2024 Inspectra. All rights reserved."
-  }
+  "app": {}
 }
