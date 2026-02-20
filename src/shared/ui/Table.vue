@@ -36,6 +36,7 @@ const props = withDefaults(
 
     expandable?: boolean
     singleExpand?: boolean
+    preventCollapsed?: boolean
     initialExpanded?: number | null
   }>(),
   {
@@ -46,6 +47,7 @@ const props = withDefaults(
 
     expandable: false,
     singleExpand: false,
+    preventCollapsed: false,
     initialExpanded: null
   }
 )
@@ -66,17 +68,23 @@ const emit = defineEmits<{
 const expandedRows = ref<Set<number>>(new Set())
 
 function isRowExpanded(index: number) {
+  if (props.preventCollapsed) return true
   return expandedRows.value.has(index)
 }
 
 function toggleExpand(row: any, index: number) {
   if (!props.expandable) return
 
-  const set = expandedRows.value
+  const set = new Set(expandedRows.value)
   const already = set.has(index)
 
   if (props.singleExpand) {
     set.clear()
+    if (already) {
+      expandedRows.value = set
+      emit('toggle-expand', row, index, false)
+      return
+    }
   }
 
   if (already) {
@@ -85,7 +93,7 @@ function toggleExpand(row: any, index: number) {
     set.add(index)
   }
 
-  expandedRows.value = new Set(set)
+  expandedRows.value = set
   emit('toggle-expand', row, index, !already)
 }
 
@@ -107,11 +115,12 @@ onMounted(async () => {
 
 watch(
   () => props.initialExpanded,
-  (idx) => {
+  (idx, prevIdx) => {
     if (!props.expandable) return
     if (idx == null) return
     if (!props.data) return
     if (props.data.length > idx) {
+      if (idx === prevIdx) return
       expandedRows.value = new Set([idx])
       emit('toggle-expand', props.data[idx], idx, true)
     }
