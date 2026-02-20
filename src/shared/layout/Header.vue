@@ -1,5 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Breadcrumb, { type BreadcrumbItem } from '../ui/Breadcrumb.vue'
 
+defineProps<{
+  title: string
+  crumbs: BreadcrumbItem[]
+}>()
+</script>
 <template>
-  <header class="px-6 py-3 flex items-center justify-between w-full"></header>
+  <div class="my-6">
+    <h1 class="text-2xl font-semibold">{{ title }}</h1>
+    <Breadcrumb :items="crumbs" />
+  </div>
 </template>
