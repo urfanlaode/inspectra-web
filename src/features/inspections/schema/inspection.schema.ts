@@ -5,8 +5,8 @@ export const inspectionItemLotSchema = z.object({
   ownerId: z.any().optional(),
   conditionId: z.any().optional(),
   availableQty: z.any().optional(),
-  inspectionItemId: z.number().int().nonnegative().optional(),
-  lotId: z.number().int().min(1, 'Lot is required'),
+  inspectionItemId: z.number().optional(),
+  lotId: z.number({ required_error: 'Lot is required' }).min(1, 'Lot is required'),
   qtyRequired: z
     .number({
       message: 'Quantity required must be a number'
@@ -15,8 +15,12 @@ export const inspectionItemLotSchema = z.object({
 })
 
 export const inspectionItemSchema = z.object({
-  inspectionId: z.number().int().nonnegative().optional(),
-  itemId: z.number().int().min(1, 'Item is required'),
+  inspectionId: z.number().optional(),
+  itemId: z
+    .number({
+      required_error: 'Item is required'
+    })
+    .min(1, 'Item is required'),
   qtyRequested: z
     .number({
       message: 'Quantity must be a number'
@@ -27,15 +31,15 @@ export const inspectionItemSchema = z.object({
 
 export const inspectionSchema = z.object({
   status: z.string().optional(),
-  serviceTypeId: z.number().int().min(1, 'Service type is required').optional(),
-  scopeOfWorkId: z.number().int().min(1, 'Scope of work is required').optional(),
-  locationId: z.number().int().min(1, 'Location is required').optional(),
-  estimatedCompletionDate: z.string().nonempty('Invalid estimated completion date').optional(),
+  serviceTypeId: z.number().min(1, 'Service type is required'),
+  scopeOfWorkId: z.number().min(1, 'Scope of work is required'),
+  locationId: z.number().min(1, 'Location is required'),
+  estimatedCompletionDate: z.string().nonempty('Estimated completion date is required'),
   dcCode: z.string().optional(),
   items: z.array(inspectionItemSchema).min(1, 'At least one inspection item is required'),
   note: z.string().optional(),
-  isCustomerCharged: z.boolean(),
-  customerId: z.number().int().min(1, 'Customer is required').optional()
+  isCustomerCharged: z.boolean().optional(),
+  customerId: z.number().min(1, 'Customer is required')
 })
 
 export type InspectionSchema = z.infer<typeof inspectionSchema>

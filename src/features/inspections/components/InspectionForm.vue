@@ -11,7 +11,7 @@ import Textfield from '@/shared/ui/Textfield.vue'
 import { findById } from '@/shared/utils/array'
 import { Pencil, Plus, Trash } from 'lucide-vue-next'
 import { Field, FieldArray } from 'vee-validate'
-import { computed, nextTick, ref, toRef, unref, watch, type Ref } from 'vue'
+import { computed, toRef, unref, watch, type Ref } from 'vue'
 import { InspectionStatus } from '../enums'
 import { useLotFilters } from '../hooks/useLotFilters'
 import { useStoreInspectionForm } from '../hooks/useStoreInspectionForm'
@@ -119,22 +119,13 @@ function getScopeOfWork(scopeOfWorkid: Ref<number | undefined>) {
 
 // region: items and lots
 
-const tableInitialExpanded = ref<number>(0)
-
-async function onAddItem(push: any, newIndex: number) {
+async function onAddItem(push: any) {
   push({
     inspectionId: 0,
     itemId: 0,
     qtyRequested: 1,
     lots: []
   })
-
-  await nextTick()
-  tableInitialExpanded.value = newIndex
-
-  setTimeout(() => {
-    tableInitialExpanded.value = 0
-  }, 300)
 }
 
 async function onAddLot(push: any, index: number) {
@@ -352,7 +343,7 @@ async function onSave() {
                   variant="secondary"
                   size="sm"
                   class="font-bold"
-                  @click="onAddItem(push, fields?.length ?? 0)"
+                  @click="onAddItem(push)"
                 >
                   <Plus class="w-4 h-4 text-primary" /> Add Item
                 </Button>
@@ -367,10 +358,7 @@ async function onSave() {
               { label: 'Qty', key: 'qtyRequested' }
             ]"
             :data="fields"
-            expandable
-            expand-on-row-click
-            single-expand
-            :initialExpanded="tableInitialExpanded"
+            :preventCollapsed="true"
           >
             <!-- lots -->
             <template #expanded-row="{ index }">
