@@ -181,6 +181,9 @@ Same form layout as New Inspection Request. Key differences:
 
 > Only available when `status` is `draft` or `new`. The Modify button should be hidden for other statuses.
 
+## Demo Video
+
+Check out the application demo vide at https://www.loom.com/share/1f068b8b8a79402fafe00c3dc00cfe42
 
 ## Author
 
